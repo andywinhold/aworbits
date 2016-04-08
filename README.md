@@ -1,5 +1,17 @@
 # ASU PHY 494 Final Project #
 
+Hey Team! Welcome to the 'Rama' homescreen. This is the repository for Rendezvous With Ramegeddon. "Rendezvous with RAMENgeddon" is on the other isle and cost much less.
+
+Please check out the Wiki page for new additions and progress we have made.
+
+Members include:
+>Jordan Boyd  |  ```jbboyd@asu.edu```
+
+>Ashley Mascareno  |  ```mascareno.ashley@gmail.com```
+
+>Andrew Winhold  |  ```andrew.winhold@asu.edu```
+
+
 For your **Final Project** you have to:
 
 1. fulfill the **objectives** that you defined in your **Proposal**
