@@ -50,8 +50,8 @@ def gravity(coordinates, masses):
             rmag = np.sqrt(r[i, 0]**2 + r[i, 1]**2 + r[i, 2]**2)
             rhat = r[i] / rmag
             dF =  rhat * G_gravity * masses[i] * masses[j] / (rmag**2)
-            force[j] += dF
-            force[i] += -dF
+            force[j] += -dF
+            force[i] += dF
             U += G_gravity * masses[i] * masses[j] / rmag    
             
     return force, U
@@ -80,23 +80,26 @@ def dynamics(x0, v0, dt, masses, nsteps=10):
     """
     
     N = len(x0) #number of objects
-    x = np.copy(x0)
+    x = np.zeros((nsteps/10,N,3))
+    dx = np.copy(x0)
     v = np.copy(v0)
     vhalf = np.zeros((N,3))
     Ut = np.zeros(nsteps)
     kinetic = np.zeros(nsteps)
     totalE = np.zeros(nsteps)
     
-    Ft, Ut[0]= gravity(x, masses)
+    Ft, Ut[0]= gravity(dx, masses)
     
     for i in range(nsteps):
         for j in range(N):
             vhalf[j] = v[j] + 0.5 * dt * Ft[j] / masses[j]
-            x[j] += dt * vhalf[j]
-        Ft, Ut[i]= gravity(x, masses)
+            dx[j] += dt * vhalf[j]
+        Ft, Ut[i]= gravity(dx, masses)
         for j in range(N):
             v[j] = vhalf[j] + 0.5 * dt * Ft[j] / masses[j]
             kinetic[i] += 0.5 * masses[j] * np.sum(v[j]**2) 
-        totalE[i] = kinetic[i] + Ut[i] 
+        totalE[i] = kinetic[i] + Ut[i]
+        if i%10 == 0:
+            x[int(i/10)] = dx
             
     return x, v, kinetic, Ut, totalE
