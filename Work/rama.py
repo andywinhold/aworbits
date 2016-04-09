@@ -8,7 +8,7 @@ import numpy as np
 
 G_gravity = 4*np.pi**2
 
-# mass in AU
+# mass in solar masses
 mass = {'Sun': 1.,
         'Uranus': 4.366244e-5,
         'Neptune': 5.151389e-5,
