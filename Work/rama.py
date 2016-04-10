@@ -49,14 +49,14 @@ def gravity(coordinates, masses):
             #force calculation
             rmag = np.sqrt(r[i, 0]**2 + r[i, 1]**2 + r[i, 2]**2)
             rhat = r[i] / rmag
-            dF =  rhat * G_gravity * masses[i] * masses[j] / (rmag**2)
-            force[j] += -dF
-            force[i] += dF
-            U += G_gravity * masses[i] * masses[j] / rmag    
+            dF =  -rhat * G_gravity * masses[i] * masses[j] / (rmag**2)
+            force[j] += dF
+            force[i] += -dF
+            U += -G_gravity * masses[i] * masses[j] / rmag    
             
     return force, U
 
-def dynamics(x0, v0, dt, masses, nsteps=10):
+def dynamics(x0, v0, dt, masses, tmax=10):
     """Integrate equations of motions
     Parameters
     ----------
@@ -73,13 +73,14 @@ def dynamics(x0, v0, dt, masses, nsteps=10):
     dt : float
          integration timestep in units?
          
-    nsteps : int, optional
-         number of integrator time steps
+    tmax : int, optional
+         total run time
          
     Returns array of coordinates of planetary objects, their velocities, total kinetic, potential, and overall energies.
     """
     
     N = len(x0) #number of objects
+    nsteps = int(tmax/dt)
     x = np.zeros((nsteps/10,N,3))
     dx = np.copy(x0)
     v = np.copy(v0)
