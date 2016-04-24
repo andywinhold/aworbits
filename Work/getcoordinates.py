@@ -178,6 +178,20 @@ real_anomaly = t_anom(E, system["Eccentricity"])
 a_long = system["Perihelion Longitude"] - system["Ascending Longitude"]
 
 def get_perifocal():
+    """Calculates perifocal coordinates from orbital elements.
+    
+    Perifocal coordinates do not take the z-axis into account, only the x and y orientation of the object.
+    
+    Outputs
+    -------
+
+    rp : N x 3 array
+        array of sun-centered coordinates for each object in the system dictionary
+        
+    vp : N x 3 array
+        velocities of each object in the solar system
+    """
+    
     # 4.37 position array
     r_ar = np.zeros((len(system["Mass"]),3))
     r_ar[:,0] = np.cos(a_long)
@@ -200,6 +214,20 @@ def get_perifocal():
     return rp, vp
 
 def get_heliocentric(r, v):
+    """Transforms perifocal coordinates into heliocentric cordinates.
+    
+    Heliocentric coordinates are oriented with respect to the ecliptic plane of the solar system 
+    and correctly model the solar system.
+    
+    Outputs
+    -------
+
+    ecliptic_r : N x 3 array
+        array of sun-centered coordinates for each object in the system dictionary in heliocentric frame
+        
+    ecliptic_v : N x 3 array
+        velocities of each object in the solar system in heliocentric frame
+    """
     ecliptic_r = np.zeros((len(system["Mass"]),3))
     ecliptic_v = np.zeros((len(system["Mass"]),3))
     
@@ -209,11 +237,13 @@ def get_heliocentric(r, v):
     sinO = np.sin(system["Ascending Longitude"])
     cosI = np.cos(system["Inclination"]) #i
     sinI = np.sin(system["Inclination"])
-        
+    
+    #Equations derived from rotation matrix
     ecliptic_r[:,0] = (cosO * cosw - sinO * sinw * cosI) * r[:,0] + (-cosO * sinw - sinO * cosw * cosI) * r[:,1]
     ecliptic_r[:,1] = (sinO * cosw + cosO * sinw * cosI) * r[:,0] + (-sinO * sinw + cosO * cosw * cosI) * r[:,1]
     ecliptic_r[:,2] = sinw * sinI * r[:,0] + cosw * sinI * r[:,1]
     
+    #Equations derived from rotation matrix
     ecliptic_v[:,0] = (cosO * cosw - sinO * sinw * cosI) * v[:,0] + (-cosO * sinw - sinO * cosw * cosI) * v[:,1]
     ecliptic_v[:,1] = (sinO * cosw + cosO * sinw * cosI) * v[:,0] + (-sinO * sinw + cosO * cosw * cosI) * v[:,1]
     ecliptic_v[:,2] = sinw * sinI * v[:,0] + cosw * sinI * v[:,1]
