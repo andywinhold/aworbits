@@ -55,8 +55,11 @@ theta = 2*np.arctan(np.tan(E/2)*np.sqrt((1-e)/(1+e)))
 return theta
 
 #Rotational matrix about the z-axis through the angle w
-def rot_omega(omega)
-""" evaluate the rotation matrix for omega the argument of perihelion
+def z_rot(angle)
+""" evaluate the z axis Euler rotation matrix for omega (lowercase) the argument of perihelion and Omega (uppercase) the right ascenscion of ascending node.
+Taken from eqns. 4.39 and 4.41 p. 173
+
+** In using make sure the omegas are not confused at output.
 
 Inputs
 ------
@@ -74,18 +77,20 @@ from p.611 of OMES
      0           0      1
 
 """
-r_omega = np.zeros([3,3], dtype=np.float)
-r_omega[0,0] = r_omega[1,1] = np.cos(omega)
-r_omega[0,1] = np.sin(omega)
-r_omega[1,0] = -np.sin(omega)
-r_omega[0,2] = r_omega[1,2] = r_omega[2,0] = r_omega[2,1] = 0
-r_omega[2,2] = 1
+z_rotmat = np.zeros([3,3], dtype=np.float)
+z_rotmat[0,0] = z_rotmat[1,1] = np.cos(angle)
+z_rotmat[0,1] = np.sin(angle)
+z_rotmat[1,0] = -np.sin(angle)
+z_rotmat[0,2] = z_rotmat[1,2] = z_rotmat[2,0] = z_rotmat[2,1] = 0
+z_rotmat[2,2] = 1
 
-return r_omega
+return z_rotmat
 
 #Rotational matrix about the x-axis through the angle i (inclination)
-def rot_incl(i)
-""" evaluate the rotation matrix for i, inclination
+def x_rot(angle)
+""" evaluate the x axis Euler rotation matrix for i, inclination.
+
+taken from eqn. 4.40 p. 173
 
 Inputs
 ------
@@ -102,45 +107,17 @@ from p.611 of OMES
   0   cos(incl)    sin(incl)
   0   -sin(incl)   cos(incl) 
 """
-r_incl = np.zeros([3,3], dtype=np.float)
-r_incl[0,0] = 1
-r_incl[0,1] = r_incl[0,2] = r_incl[1,0] = r_incl[2,0] = 0
-r_incl[1,1] = r_incl[2,2] = np.cos(i)
-r_incl[1,2] = np.sin(i)
-r_incl[2,1] = -np.sin(i)
+x_rotmat = np.zeros([3,3], dtype=np.float)
+x_rotmat[0,0] = 1
+x_rotmat[0,1] = x_rotmat[0,2] = x_rotmat[1,0] = x_rotmat[2,0] = 0
+x_rotmat[1,1] = x_rotmat[2,2] = np.cos(angle)
+x_rotmat[1,2] = np.sin(angle)
+x_rotmat[2,1] = -np.sin(angle)
 
-return r_incl
-
-#Rotational matrix about the z-axis through the angle Ohm (uppercase omega, longitude of Ascending Node)
-def rot_along(ohm)
-""" evaluate the rotation matrix for Ohm
-
-Inputs
-------
-
-ohm : angle
-
-Outputs
--------
-
-r_ohm : rotation matrix used in calculation
-
-from p.611 of OMES
-  1      0            0
-  0   cos(incl)    sin(incl)
-  0   -sin(incl)   cos(incl) 
-"""
-r_ohm = np.zeros([3,3], dtype=np.float)
-r_ohm[0,0] = r_ohm[1,1] = np.cos(ohm)
-r_ohm[0,1] = np.sin(ohm)
-r_ohm[1,0] = -np.sin(ohm)
-r_ohm[0,2] = r_ohm[1,2] = r_ohm[2,0] = r_ohm[2,1] = 0
-r_ohm[2,2] = 1
-
-return r_incl
+return x_rotmat
 
 
-def state_from_class() 
+def state_from_coe() 
 """ Calculate the state vector for planets under consideration
 sourced from algorithm 4.2 in OMES p. 610
 
@@ -151,29 +128,40 @@ r : position vector
 
 v : velocity vector
 """
-h = ang_mom(mu, a, e)
-theta = t_anom(E, e)
+# Angular Momentum
+h = ang_mom(mu, system["Semi-Major Axis"], system["Eccentricity"])
+# True Anomaly
+theta = t_anom(E, system["Eccentricity"])
 
-# 4.37 array
+# 4.37 position array
 r_ar = np.zeros([3,1], dtype=np.float)
 r_ar[0] = np.cos(theta)
 r_ar[1] = np.sin(theta)
 r_ar[2] = 0
-#4.38 array
+
+#4.38 velocity array
 v_ar = np.zeros([3,1], dtype=np.float)
 v_ar[0] = -np.sin(theta)
 v_ar[1] = e + np.cos(theta)
 v_ar[2] = 0
 
 # equations 4.37 and 4.38 in OMES p. 173
-# components of the state vector of a body relative to its perifocal reference
-# The perifocal coordinate (PQW) system is a frame of reference for an orbit. The frame is centered at the focus of the orbit, i.e. the celestial body about which the orbit is centered.
-rp = (h**2/mu) * (1/(1 + e*np.cos(theta))) * r_ar
+rp = (h**2/mu) * (1/(1 + system["Eccentricity"]*np.cos(theta))) * r_ar
 vp = (mu/h) * v_ar
 
+# p. 173 eqn. 4.42, transition of planes
+Q = np.zeros([3,3], dtype=np.float64)
+Q = z_rot(omega) * x_rot(system["Inclination"]) * z_rot(system["Ascending Longitude"])
 
+#eqn. 4.46, column vectors
+r = Q*rp
+v = Q*vp
 
+# Transpose to row vectors
+rT = np.transpose(r)
+vT = np.transpose(v)
 
+return rT, vT
 
 
 
