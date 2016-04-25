@@ -175,6 +175,7 @@ while np.abs(np.linalg.norm(deltaE)) > tol:
 real_anomaly = t_anom(E, system["Eccentricity"])
 
 #Ascending Longitude, a_long
+# according to JPL doc, Argument of Perihelion, variable name change in the future?
 a_long = system["Perihelion Longitude"] - system["Ascending Longitude"]
 
 def get_perifocal():
