@@ -27,7 +27,11 @@ smAxis = np.array([
             9.53667594,  #Saturn
             19.18916464, #Uranus
             30.06992276, #Neptune
+<<<<<<< HEAD
             9.53667594 #67.68871444,# Eris
+=======
+            1.00000261#67.68871444,# Eris
+>>>>>>> ea385a261c79bc5aae2b381cf5d1af9c1d40deee
             ])
 
 # Eccentricity
@@ -41,7 +45,11 @@ eccentricity = np.array([
             0.05386179,  #Saturn
             0.04725744,  #Uranus
             0.00859048,  #Neptune
+<<<<<<< HEAD
             0.44068      #Eris
+=======
+            0.44068      #Eris, gets changed to rama eccentricity below.
+>>>>>>> ea385a261c79bc5aae2b381cf5d1af9c1d40deee
             ])
 
 #Inclination in degrees
@@ -70,7 +78,11 @@ mLong = np.array([
             49.95424423,   #Saturn
             313.23810451,  #Uranus
             -55.12002969,  #Neptune
+<<<<<<< HEAD
             100.46457166 #204.16         #Eris
+=======
+             100.46457166#204.16         #Eris
+>>>>>>> ea385a261c79bc5aae2b381cf5d1af9c1d40deee
             ])
 mLong = np.deg2rad(mLong) #converting to radians
 
@@ -107,7 +119,11 @@ aLong = np.deg2rad(aLong) #converting to radians
 
 system = {"Mass":mass, "Semi-Major Axis":smAxis, "Eccentricity":eccentricity, "Inclination":inclination, "Mean Longitude":mLong,"Perihelion Longitude":pLong, "Ascending Longitude":aLong}
 
+<<<<<<< HEAD
 #Angular Momentum
+=======
+#Angular Momentum, from eqn. 2.61 p. 57 of OMES
+>>>>>>> ea385a261c79bc5aae2b381cf5d1af9c1d40deee
 def ang_mom(mu, a, e):
     """ Define angular momentum for state vector calculation.
 
@@ -153,6 +169,7 @@ def t_anom(E, e):
     return theta
 
 
+<<<<<<< HEAD
 #elements of rama
 #--------------------
 #10 km/hr may be too short, 50 km/hr may be too fast
@@ -173,6 +190,39 @@ h[9] = r * v_perp
 m_anomaly = system["Mean Longitude"] - system["Perihelion Longitude"]
 
 #Eccentric Anomaly, E
+=======
+#Elements of Rama
+#--------------------
+""" 
+equations taken from p. 74/75 example 2.8
+wanting to calculate h for rama but needs to be done a different way than
+our ang_mom() function because it leads to the sqrt(-#). 
+The simplest way is to let h be calculated for the origianl Eris eccentricity,
+and then edit the desired h calculated for Rama afterward.
+v : velocity
+theta : true anomaly
+"""
+v = 30 # this value or close to it has been working
+theta = 80 # degrees
+gamma = theta/2
+r = 0.36709927  # I have been trying certain semi-major axes or close to mercury's
+# perpendicular velocity
+v_perp = v * np.cos(gamma)
+print("vel :", v)
+print("theta :", theta)
+print("r :", r)
+#--------------------
+
+#Angular Momentum
+h = ang_mom(mu, system["Semi-Major Axis"],system["Eccentricity"])
+# replace for rama to avoid error in ang_mom():
+h[9] = r * v_perp
+
+#Mean Anomaly
+m_anomaly = system["Mean Longitude"] - system["Perihelion Longitude"]
+
+#Eccentric Anomaly
+>>>>>>> ea385a261c79bc5aae2b381cf5d1af9c1d40deee
 tol = 1e-5
 E = m_anomaly + system["Eccentricity"] * np.sin(m_anomaly)
 deltaE = np.zeros_like(E)
@@ -187,12 +237,17 @@ while np.abs(np.linalg.norm(deltaE)) > tol:
 
 #True Anomaly, real_anomaly
 real_anomaly = t_anom(E, system["Eccentricity"])
+<<<<<<< HEAD
 #for rama:
+=======
+#Replace for Rama:
+>>>>>>> ea385a261c79bc5aae2b381cf5d1af9c1d40deee
 real_anomaly[9] = theta
 
 #Ascending Longitude, a_long
 a_long = system["Perihelion Longitude"] - system["Ascending Longitude"]
 
+<<<<<<< HEAD
 # #replace eccentricity of eris with that of rama
 # for i, j in system["Eccentricity"].items():
 #     if j == 0.44068:
@@ -200,6 +255,12 @@ a_long = system["Perihelion Longitude"] - system["Ascending Longitude"]
 print(system["Eccentricity"][9])
 system["Eccentricity"][9] = 1.001
 print(system["Eccentricity"][9])
+=======
+#Reassign eccentricity for rama trajectory, in Eris' position of array.
+print("Old Rama Eccentricity:", system["Eccentricity"][9])
+system["Eccentricity"][9] = 1.0
+print("New Rama Eccentricity:", system["Eccentricity"][9])
+>>>>>>> ea385a261c79bc5aae2b381cf5d1af9c1d40deee
 
 
 def get_perifocal():
