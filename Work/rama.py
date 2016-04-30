@@ -199,7 +199,7 @@ def dynamics(x0, v0, dt, tmax=10):
         masses for every object in solar system
 
     dt : float
-         integration timestep in units?
+         integration timestep
          
     tmax : int, optional
          total run time
@@ -232,5 +232,25 @@ def dynamics(x0, v0, dt, tmax=10):
         totalE[i] = kinetic[i] + Ut[i]
         if i%10 == 0:
             x[int(i/10)] = dx
+        
+    #get position of earth and rama and determine distance between the two.
+    #----------------------------------------------------------------------
+    earth_pos = np.zeros(len(x[:]))
+    rama_pos = np.zeros_like(earth_pos)
+    dist = np.zeros_like(earth_pos)   
+    dist = np.abs(earth_pos - rama_pos)
+
+    earth_pos = np.sqrt(np.sum(x[:,3]**2, axis=1))
+    rama_pos = np.sqrt(np.sum(x[:,9]**2, axis=1))
+    #distance between the two
+    dist = np.abs(earth_pos - rama_pos)
+    #array to store the closer values
+    close = np.zeros((nsteps,), dtype=np.float64)
+    for i in range(len(dist)):
+        if dist[i] < 0.02:
+            print("Iteration:",i,",",
+                  "Rama distance from Earth (au):", dist[i])
+
+            
       
     return x, v, kinetic, Ut, totalE

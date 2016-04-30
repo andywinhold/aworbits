@@ -10,7 +10,7 @@ import rama.py
 mu = 1.327e11  #in km^3 / s^2
 
 #Angular Momentum
-def ang_mom(mu, a, e)
+def ang_mom(mu, a, e):
 """ Define angular momentum for state vector calculation.
 
 Inputs
@@ -31,7 +31,7 @@ h = np.sqrt(mu*a*(1-e**2))
 return h
 
 # True Anomaly (p.112 OMES, eqn 3.10)
-def t_anom(E, e)
+def t_anom(E, e):
 """ Calculates the true anomaly of a body
 
 angular parameter that defines the position of a body moving along a Keplerian orbit. 
@@ -55,7 +55,7 @@ theta = 2*np.arctan(np.tan(E/2)*np.sqrt((1-e)/(1+e)))
 return theta
 
 #Rotational matrix about the z-axis through the angle w
-def z_rot(angle)
+def z_rot(angle):
 """ evaluate the z axis Euler rotation matrix for omega (lowercase) the argument of perihelion and Omega (uppercase) the right ascenscion of ascending node.
 Taken from eqns. 4.39 and 4.41 p. 173
 
@@ -87,7 +87,7 @@ z_rotmat[2,2] = 1
 return z_rotmat
 
 #Rotational matrix about the x-axis through the angle i (inclination)
-def x_rot(angle)
+def x_rot(angle):
 """ evaluate the x axis Euler rotation matrix for i, inclination.
 
 taken from eqn. 4.40 p. 173
@@ -117,7 +117,7 @@ x_rotmat[2,1] = -np.sin(angle)
 return x_rotmat
 
 
-def state_from_coe() 
+def state_from_coe(): 
 """ Calculate the state vector for planets under consideration
 sourced from algorithm 4.2 in OMES p. 610
 
@@ -162,12 +162,3 @@ rT = np.transpose(r)
 vT = np.transpose(v)
 
 return rT, vT
-
-
-
-
-
-
-
-
-
