@@ -100,7 +100,7 @@ def dynamics(x0, v0, dt, tmax=10):
             kinetic[i] += 0.5 * mass[j] * np.sum(v[j]**2) 
         if i%10 == 0:
             x[int(i/10)] = dx
-<<<<<<< HEAD
+#<<<<<<< HEAD
         
     #get position of earth and rama and determine distance between the two.
     #----------------------------------------------------------------------
@@ -109,20 +109,22 @@ def dynamics(x0, v0, dt, tmax=10):
     dist = np.zeros_like(earth_pos)   
     dist = np.abs(earth_pos - rama_pos)
 
-    earth_pos = np.sqrt(np.sum(x[:,3]**2, axis=1))
-    rama_pos = np.sqrt(np.sum(x[:,9]**2, axis=1))
+    earth_pos = x[:,3]
+    rama_pos = x[:,9]
     #distance between the two
     dist = np.abs(earth_pos - rama_pos)
     #array to store the closer values
     close = np.zeros((nsteps,), dtype=np.float64)
-    for i in range(len(dist)):
-        if dist[i] < 0.02:
+    dist_mag = np.zeros((len(earth_pos)), dtype=np.float64)
+    for i in range(len(earth_pos)):
+        dist_mag[i] = np.linalg.norm(dist[i])
+        if dist_mag[i] < 0.2:
             print("Iteration:",i,",",
-                  "Rama distance from Earth (au):", dist[i])
+                  "Rama distance from Earth (au):", dist_mag[i])
 
             
       
-=======
+#=======
             
->>>>>>> 1f69f9476821ec1398d4c3b4e304f2e9563594e2
+#>>>>>>> 1f69f9476821ec1398d4c3b4e304f2e9563594e2
     return x, v, kinetic, Ut, totalE

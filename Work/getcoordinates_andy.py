@@ -85,7 +85,7 @@ pLong = np.array([
             92.59887831,   #Saturn
             170.95427630,  #Uranus
             44.96476227,   #Neptune
-            102.93768193 #187.1498689    #Eris ** Found by adding argument of perihelion
+            122.93768193 #187.1498689    #Eris ** Found by adding argument of perihelion
                            #and longitude of the ascending node, per JPL details.
             ])
 pLong = np.deg2rad(pLong) #converting to radians
@@ -164,10 +164,10 @@ and then edit the desired h calculated for Rama afterward.
 v : velocity
 theta : true anomaly
 """
-v = 30 # this value or close to it has been working
-theta = 80 # degrees
+v = 26 #speed of rama
+theta = 81 # degrees
 gamma = theta/2
-r = 0.36709927  # I have been trying certain semi-major axes or close to mercury's
+r = 0.46709927  # I have been trying certain semi-major axes or close to mercury's
 # perpendicular velocity
 v_perp = v * np.cos(gamma)
 print("vel :", v)
