@@ -1,6 +1,12 @@
 import numpy as np
 
-mu = 3.964016 * 9.945193 #AU^3/yr^2
+#Units of mass are in solar mass
+#Units of time are in years
+#Units of position are in AU
+#Units of velocity are in AU/year
+#
+
+mu = 3.964016 * 9.945193 #AU^3/(solarmass * yr^2)
 
 #Masses in solar masses
 mass = np.array([
@@ -30,7 +36,7 @@ smAxis = np.array([
             67.68871444,# Eris
             ])
 
-# Eccentricity
+# Eccentricity, dimensionless
 eccentricity = np.array([
             0.,          #Sun
             0.20563593,  #Mercury
@@ -74,7 +80,7 @@ mLong = np.array([
             ])
 mLong = np.deg2rad(mLong) #converting to radians
 
-#Longitude of perihelion in degrees
+#Argument of perihelion in degrees
 pLong = np.array([
             0.,            #Sun
             77.45779628,   #Mercury
@@ -107,23 +113,22 @@ aLong = np.deg2rad(aLong) #converting to radians
 
 system = {"Mass":mass, "Semi-Major Axis":smAxis, "Eccentricity":eccentricity, "Inclination":inclination, "Mean Longitude":mLong,"Perihelion Longitude":pLong, "Ascending Longitude":aLong}
 
-#Angular Momentum
 def ang_mom(mu, a, e):
     """ Define angular momentum for state vector calculation.
 
     Inputs
     ------
 
-    mu : gravitational parameter
+    mu : gravitational parameter, units of AU^3/(solarmass * yr^2)
 
-    a  : semi-major axis
+    a  : semi-major axis, units of AU
 
-    e  : eccentricity
+    e  : eccentricity, dimensionless
     
     Outputs
     -------
 
-    h  : scalar, angular momentum of body
+    h  : scalar, angular momentum of body, units in solarmass * AU/year^2
     """
     h = np.sqrt(mu*a*(1-e**2))
     return h
@@ -140,25 +145,25 @@ def t_anom(E, e):
     Inputs
     ------
 
-    E : eccentric anomaly
+    E : eccentric anomaly, dimensionless
 
-    e : eccentricity of orbiting body
+    e : eccentricity of orbiting body, dimensionless
 
     Outputs
     -------
 
-    theta : angle
+    theta : angle, in radians
     """
     theta = 2*np.arctan(np.tan(E/2)*np.sqrt((1-e)/(1+e)))
     return theta
 
-#Angular Momentum, amomentum
+#Calculate angular Momentum, amomentum
 h = ang_mom(mu, system["Semi-Major Axis"],system["Eccentricity"])
 
-#Mean Anomaly, m_anomaly
+#Calculate mean Anomaly, m_anomaly
 m_anomaly = system["Mean Longitude"] - system["Perihelion Longitude"]
    
-#Eccentric Anomaly, E
+#Calculate eccentric Anomaly, E
 tol = 1e-5
 E = m_anomaly + system["Eccentricity"] * np.sin(m_anomaly)
 deltaE = np.zeros_like(E)
@@ -171,11 +176,10 @@ while np.abs(np.linalg.norm(deltaE)) > tol:
         print("E did not converge to a solution after 1000 iterations.")
         break
         
-#True Anomaly, real_anomaly
+#Calculate true Anomaly, real_anomaly
 real_anomaly = t_anom(E, system["Eccentricity"])
 
-#Ascending Longitude, a_long
-# according to JPL doc, Argument of Perihelion, variable name change in the future?
+#Calculate argument of perihelion, a_long
 a_long = system["Perihelion Longitude"] - system["Ascending Longitude"]
 
 def get_perifocal():
@@ -187,10 +191,10 @@ def get_perifocal():
     -------
 
     rp : N x 3 array
-        array of sun-centered coordinates for each object in the system dictionary
+        array of sun-centered coordinates for each object in the system dictionary, units in AU
         
     vp : N x 3 array
-        velocities of each object in the solar system
+        velocities of each object in the solar system, units in AU/year
     """
     
     # 4.37 position array
@@ -224,10 +228,11 @@ def get_heliocentric(r, v):
     -------
 
     ecliptic_r : N x 3 array
-        array of sun-centered coordinates for each object in the system dictionary in heliocentric frame
+        array of sun-centered coordinates for each object in the system dictionary 
+        in heliocentric frame, units of AU
         
     ecliptic_v : N x 3 array
-        velocities of each object in the solar system in heliocentric frame
+        velocities of each object in the solar system in heliocentric frame, units of AU/year
     """
     ecliptic_r = np.zeros((len(system["Mass"]),3))
     ecliptic_v = np.zeros((len(system["Mass"]),3))
