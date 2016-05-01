@@ -18,7 +18,7 @@ mass = np.array([
             86.8103/(1.989e6),  #Uranus
             102.410/(1.989e6),  #Neptune
             0.0166/(1.989e6),   #Eris
-            0.0166/(1.989e6)
+            0.0166/(1.989e6)    #Rama
             ])
 
 def gravity(coordinates):
@@ -70,7 +70,7 @@ def dynamics(x0, v0, dt, tmax=10):
         masses for every object in solar system
 
     dt : float
-         integration timestep
+         integration timestep in units?
          
     tmax : int, optional
          total run time
@@ -80,7 +80,9 @@ def dynamics(x0, v0, dt, tmax=10):
     
     N = len(x0) #number of objects
     nsteps = int(tmax/dt)
-    x = np.zeros((nsteps/10,N,3))
+    #x = np.zeros((nsteps/10,N,3))
+    x = np.zeros((nsteps,N,3))
+    vf = np.zeros((nsteps,N,3))
     dx = np.copy(x0)
     v = np.copy(v0)
     vhalf = np.zeros((N,3))
@@ -98,33 +100,30 @@ def dynamics(x0, v0, dt, tmax=10):
         for j in range(N):
             v[j] = vhalf[j] + 0.5 * dt * Ft[j] / mass[j]
             kinetic[i] += 0.5 * mass[j] * np.sum(v[j]**2) 
-        if i%10 == 0:
-            x[int(i/10)] = dx
-#<<<<<<< HEAD
-        
+        #if i%10 == 0:
+            #x[int(i/10)] = dx
+        x[i] = dx
+        vf[i] = v
+            
+            
     #get position of earth and rama and determine distance between the two.
     #----------------------------------------------------------------------
     earth_pos = np.zeros(len(x[:]))
     rama_pos = np.zeros_like(earth_pos)
-    dist = np.zeros_like(earth_pos)   
-    dist = np.abs(earth_pos - rama_pos)
+    dist = np.zeros_like(earth_pos)
+    dist_mag = np.zeros(len(earth_pos))
 
     earth_pos = x[:,3]
-    rama_pos = x[:,9]
+    rama_pos = x[:,10]
     #distance between the two
     dist = np.abs(earth_pos - rama_pos)
     #array to store the closer values
     close = np.zeros((nsteps,), dtype=np.float64)
-    dist_mag = np.zeros((len(earth_pos)), dtype=np.float64)
-    for i in range(len(earth_pos)):
-        dist_mag[i] = np.linalg.norm(dist[i])
-        if dist_mag[i] < 0.2:
+    for i in range(len(dist)):
+        dist_mag[i] = np.linalg.norm(dist[i]) - 4.25875e-5
+        if dist_mag[i] < .01:
             print("Iteration:",i,",",
                   "Rama distance from Earth (au):", dist_mag[i])
+            
 
-            
-      
-#=======
-            
-#>>>>>>> 1f69f9476821ec1398d4c3b4e304f2e9563594e2
-    return x, v, kinetic, Ut, totalE
+    return x, vf, kinetic, Ut, totalE

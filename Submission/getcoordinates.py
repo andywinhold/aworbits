@@ -1,6 +1,13 @@
 import numpy as np
 
-mu = 3.964016 * 9.945193 #AU^3/yr^2
+#
+#Units of mass are in solar mass
+#Units of time are in years
+#Units of position are in AU
+#Units of velocity are in AU/year
+#
+
+mu = 3.964016 * 9.945193 #AU^3/(solarmass * yr^2)
 
 #Masses in solar masses
 mass = np.array([
@@ -13,7 +20,7 @@ mass = np.array([
             568.319/(1.989e6),  #Saturn
             86.8103/(1.989e6),  #Uranus
             102.410/(1.989e6),  #Neptune
-            2.1e8/(1.989e30),   #Rama
+            0.0166/(1.989e6),   #Eris
             ])
 
 #Semi-Major Axis in AU
@@ -27,14 +34,10 @@ smAxis = np.array([
             9.53667594,  #Saturn
             19.18916464, #Uranus
             30.06992276, #Neptune
-<<<<<<< HEAD
-            9.53667594 #67.68871444,# Eris
-=======
-            1.00000261#67.68871444,# Eris
->>>>>>> ea385a261c79bc5aae2b381cf5d1af9c1d40deee
+            67.68871444,# Eris
             ])
 
-# Eccentricity
+# Eccentricity, dimensionless
 eccentricity = np.array([
             0.,          #Sun
             0.20563593,  #Mercury
@@ -45,11 +48,7 @@ eccentricity = np.array([
             0.05386179,  #Saturn
             0.04725744,  #Uranus
             0.00859048,  #Neptune
-<<<<<<< HEAD
             0.44068      #Eris
-=======
-            0.44068      #Eris, gets changed to rama eccentricity below.
->>>>>>> ea385a261c79bc5aae2b381cf5d1af9c1d40deee
             ])
 
 #Inclination in degrees
@@ -63,7 +62,7 @@ inclination = np.array([
             2.48599187,  #Saturn
             0.77263783,  #Uranus
             1.77004347,   #Neptune
-            -0.00001531 #44.0445      #Eris
+            44.0445      #Eris
             ])
 inclination = np.deg2rad(inclination) #converting to radians
 
@@ -78,15 +77,11 @@ mLong = np.array([
             49.95424423,   #Saturn
             313.23810451,  #Uranus
             -55.12002969,  #Neptune
-<<<<<<< HEAD
-            100.46457166 #204.16         #Eris
-=======
-             100.46457166#204.16         #Eris
->>>>>>> ea385a261c79bc5aae2b381cf5d1af9c1d40deee
+            204.16         #Eris
             ])
 mLong = np.deg2rad(mLong) #converting to radians
 
-#Longitude of perihelion in degrees
+#Argument of perihelion in degrees
 pLong = np.array([
             0.,            #Sun
             77.45779628,   #Mercury
@@ -97,7 +92,7 @@ pLong = np.array([
             92.59887831,   #Saturn
             170.95427630,  #Uranus
             44.96476227,   #Neptune
-            122.93768193 #187.1498689    #Eris ** Found by adding argument of perihelion
+            187.1498689    #Eris ** Found by adding argument of perihelion
                            #and longitude of the ascending node, per JPL details.
             ])
 pLong = np.deg2rad(pLong) #converting to radians
@@ -113,33 +108,28 @@ aLong = np.array([
             113.66242448,  #Saturn
             74.01692503,   #Uranus
             35.906450258,  #Neptune
-            0.0 #131.78422574   #Eris
+            131.78422574   #Eris
             ])
 aLong = np.deg2rad(aLong) #converting to radians
 
 system = {"Mass":mass, "Semi-Major Axis":smAxis, "Eccentricity":eccentricity, "Inclination":inclination, "Mean Longitude":mLong,"Perihelion Longitude":pLong, "Ascending Longitude":aLong}
 
-<<<<<<< HEAD
-#Angular Momentum
-=======
-#Angular Momentum, from eqn. 2.61 p. 57 of OMES
->>>>>>> ea385a261c79bc5aae2b381cf5d1af9c1d40deee
 def ang_mom(mu, a, e):
     """ Define angular momentum for state vector calculation.
 
     Inputs
     ------
 
-    mu : gravitational parameter
+    mu : gravitational parameter, units of AU^3/(solarmass * yr^2)
 
-    a  : semi-major axis
+    a  : semi-major axis, units of AU
 
-    e  : eccentricity
+    e  : eccentricity, dimensionless
     
     Outputs
     -------
 
-    h  : scalar, angular momentum of body
+    h  : scalar, angular momentum of body, units in solarmass * AU/year^2
     """
     h = np.sqrt(mu*a*(1-e**2))
     return h
@@ -156,73 +146,25 @@ def t_anom(E, e):
     Inputs
     ------
 
-    E : eccentric anomaly
+    E : eccentric anomaly, dimensionless
 
-    e : eccentricity of orbiting body
+    e : eccentricity of orbiting body, dimensionless
 
     Outputs
     -------
 
-    theta : angle
+    theta : angle, in radians
     """
     theta = 2*np.arctan(np.tan(E/2)*np.sqrt((1-e)/(1+e)))
     return theta
 
-
-<<<<<<< HEAD
-#elements of rama
-#--------------------
-#10 km/hr may be too short, 50 km/hr may be too fast
-v = 35 #km/hr
-theta = 80 # degrees
-gamma = theta/2
-r = 0.72333566/2  # radius from sun, in au, 0.3... is the semimajor axis of mercury
-# perpendicular velocity
-v_perp = v * np.cos(gamma)
-#--------------------
-
-#Angular Momentum, amomentum
+#Calculate angular Momentum, amomentum
 h = ang_mom(mu, system["Semi-Major Axis"],system["Eccentricity"])
-#for rama:
-h[9] = r * v_perp
 
-#Mean Anomaly, m_anomaly
+#Calculate mean Anomaly, m_anomaly
 m_anomaly = system["Mean Longitude"] - system["Perihelion Longitude"]
-
-#Eccentric Anomaly, E
-=======
-#Elements of Rama
-#--------------------
-""" 
-equations taken from p. 74/75 example 2.8
-wanting to calculate h for rama but needs to be done a different way than
-our ang_mom() function because it leads to the sqrt(-#). 
-The simplest way is to let h be calculated for the origianl Eris eccentricity,
-and then edit the desired h calculated for Rama afterward.
-v : velocity
-theta : true anomaly
-"""
-v = 26 #speed of rama
-theta = 81 # degrees
-gamma = theta/2
-r = 0.46709927  # I have been trying certain semi-major axes or close to mercury's
-# perpendicular velocity
-v_perp = v * np.cos(gamma)
-print("vel :", v)
-print("theta :", theta)
-print("r :", r)
-#--------------------
-
-#Angular Momentum
-h = ang_mom(mu, system["Semi-Major Axis"],system["Eccentricity"])
-# replace for rama to avoid error in ang_mom():
-h[9] = r * v_perp
-
-#Mean Anomaly
-m_anomaly = system["Mean Longitude"] - system["Perihelion Longitude"]
-
-#Eccentric Anomaly
->>>>>>> ea385a261c79bc5aae2b381cf5d1af9c1d40deee
+   
+#Calculate eccentric Anomaly, E
 tol = 1e-5
 E = m_anomaly + system["Eccentricity"] * np.sin(m_anomaly)
 deltaE = np.zeros_like(E)
@@ -234,34 +176,12 @@ while np.abs(np.linalg.norm(deltaE)) > tol:
     if count > 1000:
         print("E did not converge to a solution after 1000 iterations.")
         break
-
-#True Anomaly, real_anomaly
+        
+#Calculate true Anomaly, real_anomaly
 real_anomaly = t_anom(E, system["Eccentricity"])
-<<<<<<< HEAD
-#for rama:
-=======
-#Replace for Rama:
->>>>>>> ea385a261c79bc5aae2b381cf5d1af9c1d40deee
-real_anomaly[9] = theta
 
-#Ascending Longitude, a_long
+#Calculate argument of perihelion, a_long
 a_long = system["Perihelion Longitude"] - system["Ascending Longitude"]
-
-<<<<<<< HEAD
-# #replace eccentricity of eris with that of rama
-# for i, j in system["Eccentricity"].items():
-#     if j == 0.44068:
-#         system[i] = 1.001
-print(system["Eccentricity"][9])
-system["Eccentricity"][9] = 1.001
-print(system["Eccentricity"][9])
-=======
-#Reassign eccentricity for rama trajectory, in Eris' position of array.
-print("Old Rama Eccentricity:", system["Eccentricity"][9])
-system["Eccentricity"][9] = 1.0
-print("New Rama Eccentricity:", system["Eccentricity"][9])
->>>>>>> ea385a261c79bc5aae2b381cf5d1af9c1d40deee
-
 
 def get_perifocal():
     """Calculates perifocal coordinates from orbital elements.
@@ -272,10 +192,10 @@ def get_perifocal():
     -------
 
     rp : N x 3 array
-        array of sun-centered coordinates for each object in the system dictionary
+        array of sun-centered coordinates for each object in the system dictionary, units in AU
         
     vp : N x 3 array
-        velocities of each object in the solar system
+        velocities of each object in the solar system, units in AU/year
     """
     
     # 4.37 position array
@@ -309,10 +229,11 @@ def get_heliocentric(r, v):
     -------
 
     ecliptic_r : N x 3 array
-        array of sun-centered coordinates for each object in the system dictionary in heliocentric frame
+        array of sun-centered coordinates for each object in the system dictionary 
+        in heliocentric frame, units of AU
         
     ecliptic_v : N x 3 array
-        velocities of each object in the solar system in heliocentric frame
+        velocities of each object in the solar system in heliocentric frame, units of AU/year
     """
     ecliptic_r = np.zeros((len(system["Mass"]),3))
     ecliptic_v = np.zeros((len(system["Mass"]),3))
@@ -336,5 +257,14 @@ def get_heliocentric(r, v):
 
     return ecliptic_r, ecliptic_v
 
+def add_Rama(r, v, rama_r, rama_v):
+    """ 
+    r : positions
+    v : velocity
+    theta : true anomaly
+    """
     
+    r = np.append(r, rama_r, axis=0)
+    v = np.append(v, rama_v, axis = 0)
     
+    return r, v
