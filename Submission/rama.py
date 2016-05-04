@@ -105,7 +105,7 @@ def dynamics(x0, v0, dt=0.01, tmax=10):
         x[i] = dx
         vf[i] = v
             
-            
+    totalE = kinetic + Ut        
     #If rama is present, get position of earth and rama and determine distance between the two.
     #----------------------------------------------------------------------
     if len(x[0,:]) == 11:
