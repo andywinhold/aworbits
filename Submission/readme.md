@@ -13,15 +13,15 @@ As outlined in the project proposal, this project sought to accurately simulate 
 
 There are 4 files in the submission directory. The function and purpose of each of the four files is listed below.
 
-## rama.py
+### rama.py
 This file contains our force and velocity verlet functions.
 
-## getcoordinate.py
+### getcoordinates.py
 This file contains the orbital elements of each solar system object other than Rama. It also contains the functions necessary to convert these orbital elements to perifocal and heliocentric coordinates. Lastly, it also contains the function to add rama to the arrays for heliocentric coordinates.
 
-## visual_rama.py
-This is the file that was used to visulize the simulation. It requires VIDLE to run properly.
+### visual_rama.py
+This is the file that was used to visulize the simulation. It requires VPython to run properly. Once this is installed it can be run in a jupyter notebook or using the Vpython VIDLE.
 
 
-## Run Rama.ipynb
+### Run Rama.ipynb
 This is a jupyter notebook that has been included in the submission to make running the simulation easier. It imports the necessary modules and contains the code to set up and run the simulation as outlined above. It prints a 3d graph with the orbits of the planets over the specified time period.
