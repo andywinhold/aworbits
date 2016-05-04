@@ -1,0 +1,20 @@
+Members by Github name:
+
+Jordan Boyd - jbboyd
+Ashley Mascareno - Ashley Mascareno
+Andrew Winhold - andywinhold
+
+All authors discussed the approach and organization of the project. 
+The workload in all parts of the development and problem solving of 
+this project were dispersed equally amongst the team. Ashley Mascareno 
+and jbboyd were responsible for obtaining the documents where Keplerian 
+elements for planetary bodies were sourced from. All authors contributed
+to the Github repository, wiki, and issues pages. andywinhold was 
+responsible for getting the coordinates of planetary bodies into 
+heliocentric coordinates oriented with respect to ecliptic plane. 
+jbboyd developed the gravity and dynamics functions that propagate 
+the solar system forward in time. All authors worked to get the hyperbolic
+trajectory of Rama and to confirm its potential threat to Earth. 
+jbboyd created with andywinhold editing the 2D, 3D, and energy matplotlib plots. 
+jbboyd developed the code for 3D animation of the scenario in VPython. 
+Ashley Mascareno created the design and layout of information for the team poster.
