@@ -55,7 +55,7 @@ def gravity(coordinates):
             
     return force, U
 
-def dynamics(x0, v0, dt, tmax=10):
+def dynamics(x0, v0, dt=0.01, tmax=10):
     """Integrate equations of motions
     Parameters
     ----------
@@ -106,24 +106,26 @@ def dynamics(x0, v0, dt, tmax=10):
         vf[i] = v
             
             
-    #get position of earth and rama and determine distance between the two.
+    #If rama is present, get position of earth and rama and determine distance between the two.
     #----------------------------------------------------------------------
-    earth_pos = np.zeros(len(x[:]))
-    rama_pos = np.zeros_like(earth_pos)
-    dist = np.zeros_like(earth_pos)
-    dist_mag = np.zeros(len(earth_pos))
+    if len(x[0,:]) == 11:
+        earth_pos = np.zeros(len(x[:]))
+        rama_pos = np.zeros_like(earth_pos)
+        dist = np.zeros_like(earth_pos)
+        dist_mag = np.zeros(len(earth_pos))
 
-    earth_pos = x[:,3]
-    rama_pos = x[:,10]
-    #distance between the two
-    dist = np.abs(earth_pos - rama_pos)
-    #array to store the closer values
-    close = np.zeros((nsteps,), dtype=np.float64)
-    for i in range(len(dist)):
-        dist_mag[i] = np.linalg.norm(dist[i]) - 4.25875e-5
-        if dist_mag[i] < .01:
-            print("Iteration:",i,",",
-                  "Rama distance from Earth (au):", dist_mag[i])
-            
+        earth_pos = x[:,3]
+        rama_pos = x[:,10]
+        #distance between the two
+        dist = np.abs(earth_pos - rama_pos)
+        #array to store the closer values
+        close = np.zeros((nsteps,), dtype=np.float64)
+        #if the distance is less than 0.01 AU then it prints the distance between Earth and Rama.
+        for i in range(len(dist)):
+            dist_mag[i] = np.linalg.norm(dist[i]) - 4.25875e-5 #The second value is the radius of Earth.
+            if dist_mag[i] < .01:
+                print("Iteration:",i,",",
+                      "Rama distance from Earth (au):", dist_mag[i])
+
 
     return x, vf, kinetic, Ut, totalE
