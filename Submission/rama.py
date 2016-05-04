@@ -18,7 +18,7 @@ mass = np.array([
             86.8103/(1.989e6),  #Uranus
             102.410/(1.989e6),  #Neptune
             0.0166/(1.989e6),   #Eris
-            0.0166/(1.989e6)    #Rama
+            0.0166/(1.989e8)    #Rama, 1/100 mass of Eris
             ])
 
 def gravity(coordinates):

@@ -22,10 +22,10 @@ venus = sphere(pos = er[2], radius =0.05, color = color.yellow, make_trail=True,
 earth = sphere(pos = er[3], radius =0.05, make_trail=True, material=materials.BlueMarble)
 mars = sphere(pos = er[4], radius =0.03, color = color.red, make_trail=True, material=materials.bricks)
 jupiter = sphere(pos = er[5], radius =0.1, make_trail=True, color = (.7,.3,0.1), material=materials.marble)
-#rama_sphere = cylinder(pos = er[10], axis=ev[10]/20, radius=0.01, make_trail=True, color = color.cyan)
-saturn = sphere(pos = er[6], radius =0.1, make_trail=True)
-uranus = sphere(pos = er[7], radius =0.1, make_trail=True)
-neptune = sphere(pos = er[8], radius =0.1, make_trail=True)
+rama_sphere = cylinder(pos = er[10], axis=ev[10]/20, radius=0.01, make_trail=True, color = color.cyan)
+#saturn = sphere(pos = er[6], radius =0.1, make_trail=True)
+#uranus = sphere(pos = er[7], radius =0.1, make_trail=True)
+#neptune = sphere(pos = er[8], radius =0.1, make_trail=True)
 #scene = display(center=rama_sphere.pos, forward=rama_sphere.pos)
 
 
@@ -38,10 +38,9 @@ for i in range(len(xt)):
     earth.pos = xt[i,3]
     mars.pos = xt[i,4]
     jupiter.pos = xt[i,5]
-    saturn.pos = xt[i,6]
-    uranus.pos = xt[i,7]
-    neptune.pos = xt[i,8]
-    #rama_sphere.pos = xt[i,10]
-    #rama_sphere.axis = .1*vt[i,10]/np.linalg.norm(vt[i,10])
+    #saturn.pos = xt[i,6]
+    #uranus.pos = xt[i,7]
+    #neptune.pos = xt[i,8]
+    rama_sphere.pos = xt[i,10]
+    rama_sphere.axis = .1*vt[i,10]/np.linalg.norm(vt[i,10])
     rate(70)
-    #scene.center=rama_sphere.pos
