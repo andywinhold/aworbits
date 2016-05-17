@@ -1,3 +1,7 @@
+#Copyright (C) 2016  Jordan Boyd, Ashley Mascareno, Andrew Winhold
+# Released under the GNU Public Licence, v3 or any higher version
+# Please cite where necessary.
+
 import numpy as np
 
 

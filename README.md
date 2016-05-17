@@ -1,6 +1,6 @@
 # ASU PHY 494 Final Project #
 
-Hey Team! Welcome to the 'Rama' homescreen. This is the repository for Rendezvous With Ramegeddon. "Rendezvous with RAMENgeddon" is on the other isle and cost much less.
+Hey Team! Welcome to the 'Rama' homescreen. This is the repository for Rendezvous With Ramegeddon. "Rendezvous with RAMENgeddon" is on the other aisle and cost much less.
 
 Please check out the Wiki page for new additions and progress we have made.
 
@@ -10,6 +10,12 @@ Members include:
 >Ashley Mascareno  |  ```mascareno.ashley@gmail.com```
 
 >Andrew Winhold  |  ```andrew.winhold@asu.edu```
+
+#License
+This repository and all of its contents are released under the terms of the GNU General Public License
+version 3 or any later version.
+
+Please see license.txt for more details
 
 
 For your **Final Project** you have to:
