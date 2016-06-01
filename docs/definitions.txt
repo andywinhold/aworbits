@@ -1,0 +1,3 @@
+Universal Time (UT): Time determined by the Sun's position in relation to the Greenwich meridian. (ie: at noon UT the sun lies on the Greenwich meridian)
+Sidereal Time: This is the time it takes for a distant star to be in a specified identical place (24 sidereal hours).
+Julian Day: The number of days that have passed since 12 pm January 1st, 4713 BC. For example, the Julian day number for the day starting at 12:00 UT on January 1, 2000, was 2,451,545 (from wikipedia)

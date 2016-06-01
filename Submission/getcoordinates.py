@@ -4,12 +4,10 @@
 
 import numpy as np
 
-#
 #Units of mass are in solar mass
 #Units of time are in years
 #Units of position are in AU
 #Units of velocity are in AU/year
-#
 
 mu = 3.964016 * 9.945193 #AU^3/(solarmass * yr^2)
 
