@@ -1,0 +1,4 @@
+These are the required packages to run aworbits. Particularly the procedures in the Submission folder.
+numpy
+matplotlib
+mpl_toolkits
