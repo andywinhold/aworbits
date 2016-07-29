@@ -1,0 +1,65 @@
+#Copyright (C) 2016  Jordan Boyd, Ashley Mascareno, Andrew Winhold
+# Released under the GNU Public Licence, v3 or any higher version
+# Please cite where necessary.
+
+
+# Inspired by http://space.stackexchange.com/questions/1904/how-to-programmatically-calculate-orbital-elements-using-position-velocity-vecto
+# Adapted by the Rama team
+
+def h(r, v):
+    """ Calculate the angular momentum for each planet
+    
+    Inputs
+    -----------
+    r : the distance from the Sun to a given planet
+    v : the velocity for a given planet
+    
+    Outputs
+    -----------
+    
+    angvel is a 1x3 array that is filled with result
+    angvel = [x, y, z]
+    
+    """
+    
+    angvel = np.zeros(3)
+    
+    # x component
+    angvel[0] = cross(r, v)
+    # y component
+    angvel[1] = cross(r, v)
+    # z component
+    angvel[2] = cross(r, v)
+    
+    return angvel
+
+nhat = cross([0, 0, 1], h)
+
+def evec(v, mu, r)
+    """ Calculate the eccentricity vector
+    
+    Inputs
+    ------------
+    v : the velocity vector for a given planet
+    mu : the product of the gravitational constant and the mass of a given planet
+    r : the distance from the Sun to a given planet
+    
+    Outputs
+    ------------
+    
+     eccen is a 1x3 array that is filled with result
+    eccen = [x, y, z]
+    
+    """
+    
+    eccen = np.zeros(3)
+    
+    # x component
+    angvel[0] = ((mag(v)^2 - mu/mag(r))*r - dot(r, v)*v)/mu
+    # y component
+    angvel[1] = ((mag(v)^2 - mu/mag(r))*r - dot(r, v)*v)/mu
+    # z component
+    angvel[2] = ((mag(v)^2 - mu/mag(r))*r - dot(r, v)*v)/mu
+    
+    return eccen
+    
